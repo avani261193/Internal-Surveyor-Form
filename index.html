@@ -6,12 +6,12 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #fffde7; /* Lemon background */
+      background-color: #FFFACD; /* Lemon background */
       padding: 30px;
       margin: 0;
     }
     .container {
-      background: #ffffff;
+      background-color: #ffe5b4; /* Peach container */
       padding: 30px;
       border-radius: 12px;
       max-width: 850px;
@@ -20,38 +20,43 @@
     }
     h2 {
       text-align: center;
-      color: #333;
+      color: #1a237e;
     }
-    p, li {
-      color: #444;
+    ol {
+      background: #f3e5f5; /* light violet for instructions */
+      padding: 15px;
+      border-radius: 8px;
     }
     label {
       display: block;
       margin-top: 20px;
       font-weight: bold;
-      color: #222;
+      color: #1565c0; /* Blue for questions */
     }
     input, textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 6px;
+      margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 1em;
     }
+    .description {
+      color: #8e24aa; /* Violet for descriptions */
+      font-size: 0.9em;
+    }
     .example {
-      font-size: 0.85em;
-      color: #666;
-      margin-top: 4px;
+      font-size: 0.9em;
+      color: #2e7d32; /* Green for examples */
     }
     .error {
       display: none;
-      color: #d9534f;
-      font-size: 0.85em;
+      color: #d32f2f; /* Red for errors */
+      font-size: 0.9em;
       margin-top: 4px;
     }
     .submit-btn {
-      background-color: #ffc107;
+      background-color: #fbc02d; /* Yellow button */
       color: #000;
       padding: 12px;
       margin-top: 25px;
@@ -61,18 +66,9 @@
       width: 100%;
       font-size: 1.1em;
     }
-    .submit-btn:hover {
-      background-color: #ffca28;
-    }
     .thank-you {
       text-align: center;
-      color: #28a745;
-    }
-    ol {
-      background: #fff9c4;
-      padding: 15px;
-      border-radius: 6px;
-      margin-bottom: 20px;
+      color: #2e7d32;
     }
   </style>
 </head>
@@ -80,11 +76,10 @@
   <div class="container">
     <img src="https://raw.githubusercontent.com/avani261193/Internal-Surveyor-Form/b22df7c80eb4612971554f2240a25408d9aaa192/logo.png" alt="Logo" style="display:block;margin:auto;max-width:150px;">
     <h2>Internal Surveyor Program Registration Form</h2>
-    <p>All applicants are required to complete this form as part of the eligibility review process.</p>
     <ol>
-      <li>Enter your full name as per official documents — no titles or initials.</li>
-      <li>This information is used to generate your official certificate — ensure accuracy.</li>
-      <li>By submitting, you confirm the information is true and complete to the best of your knowledge.</li>
+      <li><span class="description">Enter your full name exactly as per official documents. Do not use titles, middle names, initials, or abbreviations.</span></li>
+      <li><span class="description">This information will be used for your certificate. Please ensure it is correct.</span></li>
+      <li><span class="description">By submitting this form, you confirm that all details are accurate and complete.</span></li>
     </ol>
 
     <form id="registrationForm">
@@ -102,29 +97,34 @@
       <div class="example">e.g., +91XXXXXXXXXX or +971XXXXXXXXX</div>
       <div class="error" id="mobileError"></div>
 
-      <label for="degree">Degree(s) and Year(s) *</label>
+      <label for="degree">Degree(s)/Educational Qualifications *</label>
       <input type="text" id="degree" name="degree" required>
+      <div class="description">List all qualifications with completion/expected year, separated by commas.</div>
       <div class="example">MBA 2020, BSc Nursing 2018, Pursuing MHA 2025 (expected)</div>
       <div class="error" id="degreeError"></div>
 
-      <label for="currentOrg">Current Role and Organization *</label>
+      <label for="currentOrg">Current/Most Recent Role & Organization *</label>
       <input type="text" id="currentOrg" name="currentOrg" required>
-      <div class="example">Quality Manager – XYZ Hospital 2023</div>
+      <div class="description">Format: Designation – Organization</div>
+      <div class="example">e.g., Quality Manager – XYZ Hospital 2023</div>
       <div class="error" id="currentOrgError"></div>
 
-      <label for="workExperience">Previous Work Roles with Duration *</label>
+      <label for="workExperience">Previous Work Roles & Duration *</label>
       <textarea id="workExperience" name="workExperience" required></textarea>
-      <div class="example">Quality Manager 2020–2024, NABH Consultant 2016–2020</div>
+      <div class="description">List roles with start–end years, separated by commas.</div>
+      <div class="example">e.g., Consultant 2018–2022, Manager 2015–2018</div>
       <div class="error" id="workExperienceError"></div>
 
       <label for="accreditation">Accreditation Body Experience *</label>
       <textarea id="accreditation" name="accreditation" required></textarea>
-      <div class="example">NABH Consultant 2019–2022, JCI Observer 2021, Currently with QAI 2023</div>
+      <div class="description">Mention all relevant accreditation bodies with roles and years. If none, write "None".</div>
+      <div class="example">e.g., NABH Consultant 2019–2022, JCI Observer 2021</div>
       <div class="error" id="accreditationError"></div>
 
       <label for="certifications">Certifications *</label>
       <textarea id="certifications" name="certifications" required></textarea>
-      <div class="example">BLS 2021, ACLS 2022, Six Sigma 2023 or write "None"</div>
+      <div class="description">List all certifications with year or write "None".</div>
+      <div class="example">e.g., BLS 2021, Six Sigma 2023</div>
       <div class="error" id="certificationsError"></div>
 
       <label for="cvUpload">Upload CV (PDF):</label>
@@ -133,7 +133,7 @@
       <label for="idUpload">Upload ID Proof (PDF):</label>
       <input type="file" id="idUpload" name="idUpload" accept=".pdf" required>
 
-      <label for="photoUpload">Upload Passport Photo (JPG/PNG):</label>
+      <label for="photoUpload">Upload Passport Size Photo (JPG/PNG):</label>
       <input type="file" id="photoUpload" name="photoUpload" accept=".jpg,.jpeg,.png" required>
 
       <label>
@@ -186,7 +186,7 @@
       if (!valid) return;
 
       const formData = new FormData(this);
-      fetch('https://script.google.com/macros/s/AKfycby6LOB3dIHVGKMGlotDCLiBpVk2iKKEShmKDElfUKTDptIOh7X8IXy3YUmsv8sewps4ZA/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbyGW7vbVaIbGy-PFtNCohv83wEk5hb1AnhIAHEiFz3dAHUQXinOu8BssoVjsU1oGqnMqg/exec', {
         method: 'POST',
         body: formData
       })
