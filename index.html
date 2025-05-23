@@ -197,10 +197,14 @@
     })
     .then(res => res.text())
     .then(data => {
-      document.querySelector('.container').innerHTML = `
-        <h2 class="thank-you">Thank You!</h2>
-        <p>Your form has been submitted successfully.</p>
-      `;
+      if (data.includes("Submitted")) {
+        document.querySelector('.container').innerHTML = `
+          <h2 class="thank-you">Thank You!</h2>
+          <p>Your form has been submitted successfully.</p>
+        `;
+      } else {
+        throw new Error("Unexpected response: " + data);
+      }
     })
     .catch(err => {
       alert("Error submitting the form. Please try again.");
@@ -210,4 +214,3 @@
 </script>
 </body>
 </html>
-
