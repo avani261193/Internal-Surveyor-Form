@@ -3,300 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Internal Surveyor Program Registration Form</title>
-  <style>
-    <script>
-  const form = document.getElementById("surveyForm");
-  const progressBar = document.getElementById("progressBar");
-
-  function toBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-  }
-
-  function validateTextarea(id) {
-    const field = document.getElementById(id);
-    const error = document.getElementById("error-" + id);
-    const lines = field.value.split(/\n|,/).map(line => line.trim());
-    const valid = lines.some(line => /20\d{2}|none|None|currently|Currently/.test(line));
-    if (!valid) {
-      error.textContent = "Please enter at least one valid year or accepted keyword (e.g., None, Currently).";
-      error.style.display = 'block';
-      return false;
-    }
-    error.style.display = 'none';
-    return true;
-  }
-
-  function validateFiles() {
-    const fileInput = document.getElementById("files");
-    const error = document.getElementById("error-files");
-    const files = fileInput.files;
-    if (files.length !== 3) {
-      error.textContent = "Please upload exactly 3 PDF files.";
-      error.style.display = 'block';
-      return false;
-    }
-    for (let file of files) {
-      if (file.type !== "application/pdf") {
-        error.textContent = "All files must be in PDF format.";
-        error.style.display = 'block';
-        return false;
-      }
-    }
-    error.style.display = 'none';
-    return true;
-  }
-
-  function validateDeclaration() {
-    const checkbox = document.getElementById("declaration");
-    const error = document.getElementById("error-declaration");
-    if (!checkbox.checked) {
-      error.textContent = "You must accept the declaration to proceed.";
-      error.style.display = 'block';
-      return false;
-    }
-    error.style.display = 'none';
-    return true;
-  }
-
-  function validateInputs() {
-    let valid = true;
-    const fields = ["fullName", "mobile", "email", "orgrole"];
-    for (let field of fields) {
-      const el = document.getElementById(field);
-      const error = document.getElementById("error-" + field);
-      if (!el.value.trim()) {
-        error.textContent = "This field is required.";
-        error.style.display = 'block';
-        valid = false;
-      } else {
-        error.style.display = 'none';
-      }
-    }
-
-    valid = validateTextarea("degrees") && valid;
-    valid = validateTextarea("workRoles") && valid;
-    valid = validateTextarea("accreditation") && valid;
-    valid = validateTextarea("certifications") && valid;
-    valid = validateFiles() && valid;
-    valid = validateDeclaration() && valid;
-
-    return valid;
-  }
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    if (!validateInputs()) return;
-
-    const formData = new FormData(form);
-    const files = document.getElementById("files").files;
-    const fileArray = [];
-
-    for (let file of files) {
-      const base64 = await toBase64(file);
-      fileArray.push({
-        name: file.name,
-        type: file.type,
-        content: base64.split(",")[1]
-      });
-    }
-
-    const payload = {
-      fullName: formData.get("fullName"),
-      mobile: formData.get("mobile"),
-      email: formData.get("email"),
-      orgrole: formData.get("orgrole"),
-      degrees: formData.get("degrees"),
-      roles: formData.get("workRoles"),
-      accreditation: formData.get("accreditation"),
-      certifications: formData.get("certifications"),
-      files: fileArray
-    };
-
-    fetch("https://script.google.com/macros/s/AKfycbznSucvQ3N8ub2BaJ8tGdyE5F0VQVrQmlvrGWJNwpWfHmgrN4ifRq9SOSRdkD4ezTOKOQ/exec", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/json" }
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        form.innerHTML = '<h2 style="text-align:center;color:#006400;">✅ Thank you! Your form has been submitted successfully.</h2>';
-      } else {
-        alert("❌ Submission failed: " + data.error);
-      }
-    })
-    .catch(err => alert("❌ Network error: " + err));
-  });
-
-  // Progress bar update
-  const formElements = form.querySelectorAll("input, textarea");
-  formElements.forEach(el => el.addEventListener('input', () => {
-    const filled = Array.from(formElements).filter(el => el.value.trim() !== "").length;
-    const total = formElements.length;
-    const percent = Math.floor((filled / total) * 100);
-    progressBar.style.width = percent + "%";
-  }));
-</script>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: crimson;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 800px;
-      margin: 2em auto;
-      background: #fdfd96; /* Lemon background */
-      padding: 2em;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.15);
-    }
-    .logo {
-      display: block;
-      margin: 0 auto 1em;
-      max-width: 150px;
-    }
-    h1 {
-      text-align: center;
-      color: #003366;
-    }
-    label {
-      font-weight: bold;
-      margin-top: 1.2em;
-      display: block;
-      color: #003366;
-    }
-    .description {
-      font-size: 0.9em;
-      color: #006400;
-      margin-bottom: 0.3em;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 0.6em;
-      margin-bottom: 0.5em;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1em;
-    }
-    input[type="file"] {
-      padding: 0.3em;
-    }
-    .error {
-      color: #b22222;
-      font-size: 0.85em;
-      background: #ffe6e6;
-      padding: 0.3em 0.5em;
-      border-radius: 4px;
-      display: none;
-      margin-bottom: 0.5em;
-    }
-    .progress {
-      height: 8px;
-      background: #e0e0e0;
-      border-radius: 10px;
-      margin: 1em 0;
-      overflow: hidden;
-    }
-    .progress-bar {
-      width: 0;
-      height: 100%;
-      background-color: #007bff;
-      transition: width 0.4s ease;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      padding: 0.7em 1.5em;
-      border: none;
-      border-radius: 5px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <title>Internal Surveyor Program Registration</title>
 </head>
-<body>
-  <div class="container">
-    <img src="logo.png" alt="AACI Logo" class="logo" />
-    <h1>Internal Surveyor Program Registration Form</h1>
-
-    <p style="background: #ffe4b5; color: #003366; padding: 1em; border-radius: 6px;">
-      <strong>All applicants are required to complete this form as part of the eligibility review process.</strong><br><br>
-      Please read the instructions carefully before filling the form:
-      <ol>
-        <li>Enter your full name including Name and Surname exactly as per official documents. <strong>Do not use titles, middle names, initials or abbreviations.</strong></li>
-        <li><em>This will be used for generating your official certificate. Please ensure accuracy.</em></li>
-        <li>By submitting this form, you confirm that the information provided is accurate and complete to the best of your knowledge.</li>
-      </ol>
-    </p>
-
-    <div class="progress">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-
+<body style="background: crimson; font-family: Arial, sans-serif;">
+  <div style="max-width: 700px; margin: 2em auto; background: #fdfd96; padding: 2em; border-radius: 10px;">
+    <h2 style="color:#003366; text-align: center;">Internal Surveyor Program Registration</h2>
     <form id="surveyForm">
-      <label for="fullName">Full Name (No initials or titles)</label>
-      <div class="description">Example: Anita Sharma</div>
-      <input type="text" id="fullName" name="fullName" required />
-      <div class="error" id="error-fullName"></div>
+      <label>Full Name:</label><br>
+      <input type="text" name="fullName" required><br><br>
 
-      <label for="mobile">Mobile Number (with country code)</label>
-      <div class="description">e.g., +91XXXXXXXXXX</div>
-      <input type="text" id="mobile" name="mobile" required />
-      <div class="error" id="error-mobile"></div>
+      <label>Mobile Number:</label><br>
+      <input type="text" name="mobile" required><br><br>
 
-      <label for="email">Email Address</label>
-      <div class="description">e.g., example@example.com</div>
-      <input type="email" id="email" name="email" required />
-      <div class="error" id="error-email"></div>
+      <label>Email Address:</label><br>
+      <input type="email" name="email" required><br><br>
 
-      <label for="orgrole">Current Organization & Role</label>
-      <div class="description">e.g., Quality Manager – XYZ Hospital</div>
-      <input type="text" id="orgrole" name="orgrole" required />
-      <div class="error" id="error-orgrole"></div>
+      <label>CV (PDF):</label><br>
+      <input type="file" id="cvFile" accept="application/pdf" required><br><br>
 
-      <label for="degrees">Degree(s) and Year(s)</label>
-      <div class="description">Example: MBA 2020, BSc Nursing 2018</div>
-      <textarea id="degrees" name="degrees" rows="3" required></textarea>
-      <div class="error" id="error-degrees"></div>
+      <label>Passport Size Photo (PDF):</label><br>
+      <input type="file" id="photoFile" accept="application/pdf" required><br><br>
 
-      <label for="workRoles">Previous Work Roles with Duration</label>
-      <div class="description">e.g., Consultant 2018–2022</div>
-      <textarea id="workRoles" name="workRoles" rows="3" required></textarea>
-      <div class="error" id="error-workRoles"></div>
-
-      <label for="accreditation">Accreditation Body Experience</label>
-      <div class="description">e.g., NABH – Consultant – 2019 to 2022, JCI – Observer – 2021, Currently with QAI since 2023. Write “None” if not applicable.</div>
-      <textarea id="accreditation" name="accreditation" rows="3" required></textarea>
-      <div class="error" id="error-accreditation"></div>
-
-      <label for="certifications">Certifications with Year</label>
-      <div class="description">e.g., BLS 2021, Six Sigma 2022. Write “None” if not applicable.</div>
-      <textarea id="certifications" name="certifications" rows="3" required></textarea>
-      <div class="error" id="error-certifications"></div>
-
-      <label for="files">Upload Your CV, ID Proof, and Passport Photo</label>
-      <div class="description">Upload exactly 3 files in PDF format — CV, ID proof, and passport-size photo only.</div>
-      <input type="file" id="files" name="files" accept="application/pdf" multiple required />
-      <div class="error" id="error-files"></div>
-
-      <label>
-        <input type="checkbox" id="declaration" required />
-        <span style="color: #003366; font-size: 0.95em;">I hereby declare that the information provided above is true and correct to the best of my knowledge.</span>
-      </label>
-      <div class="error" id="error-declaration"></div>
+      <label>Official ID Proof (PDF):</label><br>
+      <input type="file" id="idFile" accept="application/pdf" required><br><br>
 
       <button type="submit">Submit</button>
     </form>
+    <div id="message" style="margin-top: 20px; color: green; text-align: center;"></div>
   </div>
+
+  <script>
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const message = document.getElementById('message');
+
+      const cv = document.getElementById('cvFile').files[0];
+      const photo = document.getElementById('photoFile').files[0];
+      const id = document.getElementById('idFile').files[0];
+
+      const data = {
+        fullName: form.fullName.value,
+        mobile: form.mobile.value,
+        email: form.email.value,
+        files: {
+          cv: { name: cv.name, type: cv.type, content: await toBase64(cv) },
+          photo: { name: photo.name, type: photo.type, content: await toBase64(photo) },
+          id: { name: id.name, type: id.type, content: await toBase64(id) }
+        }
+      };
+
+      fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_URL/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.json())
+      .then(resp => {
+        if (resp.success) {
+          message.innerText = "✅ Submitted successfully!";
+          form.reset();
+        } else {
+          message.innerText = "❌ Submission failed.";
+        }
+      })
+      .catch(() => {
+        message.innerText = "❌ Network error. Try again.";
+      });
+    });
+  </script>
 </body>
 </html>
