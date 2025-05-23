@@ -1,83 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Internal Surveyor Program Registration</title>
+  <title>Internal Surveyor Program Registration Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .example {
+      font-size: 0.9em;
+      color: #555;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    .submit-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .submit-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
-<body style="background: crimson; font-family: Arial, sans-serif;">
-  <div style="max-width: 700px; margin: 2em auto; background: #fdfd96; padding: 2em; border-radius: 10px;">
-    <h2 style="color:#003366; text-align: center;">Internal Surveyor Program Registration</h2>
-    <form id="surveyForm">
-      <label>Full Name:</label><br>
-      <input type="text" name="fullName" required><br><br>
+<body>
+  <div class="container">
+    <img src="https://raw.githubusercontent.com/avani261193/Internal-Surveyor-Form/b22df7c80eb4612971554f2240a25408d9aaa192/logo.png" alt="Logo" style="display:block;margin:auto;max-width:150px;">
+    <h2>Internal Surveyor Program Registration Form</h2>
+    <p>All applicants are required to complete this form as part of the eligibility review process. Please read the instructions carefully before filling the form.</p>
+    <ol>
+      <li>Enter your full name, including name and surname exactly as per official documents. Do not use titles, middle names, initials, or abbreviations.</li>
+      <li>This will be used for generating your official certificate. Please ensure accuracy.</li>
+      <li>By submitting this form, you confirm that the information provided is accurate and complete to the best of your knowledge.</li>
+    </ol>
+    <form id="registrationForm">
+      <label for="fullName">Full Name (no initials or titles):</label>
+      <input type="text" id="fullName" name="fullName" required>
+      <div class="example">Example: Amita Sharma</div>
+      <div class="error" id="fullNameError"></div>
 
-      <label>Mobile Number:</label><br>
-      <input type="text" name="mobile" required><br><br>
+      <label for="mobile">Mobile Number (with country code):</label>
+      <input type="tel" id="mobile" name="mobile" required>
+      <div class="example">Example: +919876543210</div>
+      <div class="error" id="mobileError"></div>
 
-      <label>Email Address:</label><br>
-      <input type="email" name="email" required><br><br>
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" name="email" required>
+      <div class="error" id="emailError"></div>
 
-      <label>CV (PDF):</label><br>
-      <input type="file" id="cvFile" accept="application/pdf" required><br><br>
+      <label for="currentOrg">Current Organization and Role:</label>
+      <input type="text" id="currentOrg" name="currentOrg" required>
+      <div class="example">Example: Manager XYZ Corp 2025</div>
+      <div class="error" id="currentOrgError"></div>
 
-      <label>Passport Size Photo (PDF):</label><br>
-      <input type="file" id="photoFile" accept="application/pdf" required><br><br>
+      <label for="degree">Degree and Year:</label>
+      <input type="text" id="degree" name="degree" required>
+      <div class="example">Example: MBA 2020</div>
+      <div class="error" id="degreeError"></div>
 
-      <label>Official ID Proof (PDF):</label><br>
-      <input type="file" id="idFile" accept="application/pdf" required><br><br>
+      <label for="previousWork">Previous Work Role with Duration:</label>
+      <textarea id="previousWork" name="previousWork" required></textarea>
+      <div class="example">Example: Consultant 2018 to 2022</div>
+      <div class="error" id="previousWorkError"></div>
 
-      <button type="submit">Submit</button>
+      <label for="accreditation">Accreditation Body Experience:</label>
+      <textarea id="accreditation" name="accreditation" required></textarea>
+      <div class="example">Example: NABS Consultant 2019 to 2022</div>
+      <div class="error" id="accreditationError"></div>
+
+      <label for="certifications">Certifications:</label>
+      <textarea id="certifications" name="certifications" required></textarea>
+      <div class="example">Example: BLS 2026</div>
+      <div class="error" id="certificationsError"></div>
+
+      <label for="cvUpload">Upload CV (PDF):</label>
+      <input type="file" id="cvUpload" name="cvUpload" accept=".pdf" required>
+
+      <label for="idUpload">Upload ID Proof (PDF):</label>
+      <input type="file" id="idUpload" name="idUpload" accept=".pdf" required>
+
+      <label for="photoUpload">Upload Passport Size Photo (JPG/PNG):</label>
+      <input type="file" id="photoUpload" name="photoUpload" accept=".jpg,.jpeg,.png" required>
+
+      <label>
+        <input type="checkbox" id="declaration" name="declaration" required>
+        I hereby declare that the information provided above is true and correct to the best of my knowledge.
+      </label>
+      <div class="error" id="declarationError"></div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
     </form>
-    <div id="message" style="margin-top: 20px; color: green; text-align: center;"></div>
   </div>
 
   <script>
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const form = e.target;
-      const message = document.getElementById('message');
 
-      const cv = document.getElementById('cvFile').files[0];
-      const photo = document.getElementById('photoFile').files[0];
-      const id = document.getElementById('idFile').files[0];
+      let valid = true;
 
-      const data = {
-        fullName: form.fullName.value,
-        mobile: form.mobile.value,
-        email: form.email.value,
-        files: {
-          cv: { name: cv.name, type: cv.type, content: await toBase64(cv) },
-          photo: { name: photo.name, type: photo.type, content: await toBase64(photo) },
-          id: { name: id.name, type: id.type, content: await toBase64(id) }
-        }
-      };
+      const fullName = document.getElementById('fullName').value.trim();
+      const currentOrg = document.getElementById('currentOrg').value.trim();
+      const degree = document.getElementById('degree').value.trim();
+      const yearRegex = /\b(19|20)\d{2}\b/;
 
-      fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_URL/exec", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
+      if (/^(Dr\.|Mr\.|Ms\.|Mrs\.|\b[A-Z]\.|\b[A-Z]{2,})/.test(fullName)) {
+        document.getElementById('fullNameError').textContent = "Do not include titles or initials.";
+        valid = false;
+      } else {
+        document.getElementById('fullNameError').textContent = "";
+      }
+
+      if (!yearRegex.test(currentOrg)) {
+        document.getElementById('currentOrgError').textContent = "Current role must include a valid year.";
+        valid = false;
+      } else {
+        document.getElementById('currentOrgError').textContent = "";
+      }
+
+      if (!yearRegex.test(degree)) {
+        document.getElementById('degreeError').textContent = "Degree must include a valid year.";
+        valid = false;
+      } else {
+        document.getElementById('degreeError').textContent = "";
+      }
+
+      if (!valid) return;
+
+      const formData = new FormData(this);
+      fetch('https://script.google.com/macros/s/AKfycby6LOB3dIHVGKMGlotDCLiBpVk2iKKEShmKDElfUKTDptIOh7X8IXy3YUmsv8sewps4ZA/exec', {
+        method: 'POST',
+        body: formData
       })
-      .then(res => res.json())
-      .then(resp => {
-        if (resp.success) {
-          message.innerText = "✅ Submitted successfully!";
-          form.reset();
-        } else {
-          message.innerText = "❌ Submission failed.";
-        }
+      .then(response => response.text())
+      .then(result => {
+        document.querySelector('.container').innerHTML = `
+          <h2>Thank You!</h2>
+          <p>Your form has been successfully submitted. We appreciate your response and will be in touch if needed.</p>
+        `;
       })
-      .catch(() => {
-        message.innerText = "❌ Network error. Try again.";
+      .catch(error => {
+        alert("Error submitting form");
+        console.error(error);
       });
     });
   </script>
