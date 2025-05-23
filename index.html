@@ -5,6 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Internal Surveyor Program Registration Form</title>
   <style>
+    <script>
+  const form = document.getElementById("surveyForm");
+  const progressBar = document.getElementById("progressBar");
+
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  function validateTextarea(id) {
+    const field = document.getElementById(id);
+    const error = document.getElementById("error-" + id);
+    const lines = field.value.split(/\n|,/).map(line => line.trim());
+    const valid = lines.some(line => /20\d{2}|none|None|currently|Currently/.test(line));
+    if (!valid) {
+      error.textContent = "Please enter at least one valid year or accepted keyword (e.g., None, Currently).";
+      error.style.display = 'block';
+      return false;
+    }
+    error.style.display = 'none';
+    return true;
+  }
+
+  function validateFiles() {
+    const fileInput = document.getElementById("files");
+    const error = document.getElementById("error-files");
+    const files = fileInput.files;
+    if (files.length !== 3) {
+      error.textContent = "Please upload exactly 3 PDF files.";
+      error.style.display = 'block';
+      return false;
+    }
+    for (let file of files) {
+      if (file.type !== "application/pdf") {
+        error.textContent = "All files must be in PDF format.";
+        error.style.display = 'block';
+        return false;
+      }
+    }
+    error.style.display = 'none';
+    return true;
+  }
+
+  function validateDeclaration() {
+    const checkbox = document.getElementById("declaration");
+    const error = document.getElementById("error-declaration");
+    if (!checkbox.checked) {
+      error.style.display = 'block';
+      return false;
+    }
+    error.style.display = 'none';
+    return true;
+  }
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const requiredFields = ["fullName", "mobile", "email", "orgrole", "degrees", "workRoles", "accreditation", "certifications"];
+    let valid = true;
+
+    for (let field of requiredFields) {
+      const el = document.getElementById(field);
+      const error = document.getElementById("error-" + field);
+      if (!el.value.trim()) {
+        error.textContent = "This field is required.";
+        error.style.display = 'block';
+        valid = false;
+      } else {
+        error.style.display = 'none';
+      }
+    }
+
+    valid = validateTextarea("degrees") && valid;
+    valid = validateTextarea("workRoles") && valid;
+    valid = validateTextarea("accreditation") && valid;
+    valid = validateTextarea("certifications") && valid;
+    valid = validateFiles() && valid;
+    valid = validateDeclaration() && valid;
+
+    if (!valid) return;
+
+    const formData = new FormData(form);
+    const files = document.getElementById("files").files;
+    const fileArray = [];
+
+    for (let file of files) {
+      const base64 = await toBase64(file);
+      fileArray.push({
+        name: file.name,
+        type: file.type,
+        content: base64.split(",")[1]
+      });
+    }
+
+    const payload = {
+      fullName: formData.get("fullName"),
+      mobile: formData.get("mobile"),
+      email: formData.get("email"),
+      orgrole: formData.get("orgrole"),
+      degrees: formData.get("degrees"),
+      roles: formData.get("workRoles"),
+      accreditation: formData.get("accreditation"),
+      certifications: formData.get("certifications"),
+      files: fileArray
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbznSucvQ3N8ub2BaJ8tGdyE5F0VQVrQmlvrGWJNwpWfHmgrN4ifRq9SOSRdkD4ezTOKOQ/exec", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        form.innerHTML = '<h2 style="text-align:center;color:#006400;">✅ Thank you! Your form has been submitted successfully.</h2>';
+      } else {
+        alert("❌ Submission failed: " + data.error);
+      }
+    })
+    .catch(err => alert("❌ Network error: " + err));
+  });
+</script>
     body {
       font-family: 'Segoe UI', sans-serif;
       background: crimson;
