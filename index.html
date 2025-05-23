@@ -1,4 +1,3 @@
-<!-- FINAL VERSION STARTS HERE -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,61 +6,73 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #f8f9fa, #e9ecef);
-      padding: 20px;
+      background: #fffde7; /* Lemon background */
+      padding: 30px;
+      margin: 0;
     }
     .container {
       background: #ffffff;
       padding: 30px;
-      border-radius: 10px;
-      max-width: 800px;
+      border-radius: 12px;
+      max-width: 850px;
       margin: auto;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
     h2 {
       text-align: center;
-      color: #343a40;
+      color: #333;
+    }
+    p, li {
+      color: #444;
     }
     label {
       display: block;
       margin-top: 20px;
       font-weight: bold;
-      color: #495057;
+      color: #222;
     }
     input, textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ced4da;
-      border-radius: 5px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
       font-size: 1em;
     }
     .example {
-      font-size: 0.9em;
-      color: #6c757d;
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 4px;
     }
     .error {
-      color: #dc3545;
-      font-size: 0.9em;
+      display: none;
+      color: #d9534f;
+      font-size: 0.85em;
+      margin-top: 4px;
     }
     .submit-btn {
-      background-color: #28a745;
-      color: white;
+      background-color: #ffc107;
+      color: #000;
       padding: 12px;
-      margin-top: 30px;
+      margin-top: 25px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       width: 100%;
       font-size: 1.1em;
     }
-    .submit-btn:disabled {
-      background-color: #6c757d;
-      cursor: not-allowed;
+    .submit-btn:hover {
+      background-color: #ffca28;
     }
     .thank-you {
       text-align: center;
       color: #28a745;
+    }
+    ol {
+      background: #fff9c4;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -69,7 +80,13 @@
   <div class="container">
     <img src="https://raw.githubusercontent.com/avani261193/Internal-Surveyor-Form/b22df7c80eb4612971554f2240a25408d9aaa192/logo.png" alt="Logo" style="display:block;margin:auto;max-width:150px;">
     <h2>Internal Surveyor Program Registration Form</h2>
-    <p>All applicants are required to complete this form as part of the eligibility review process. Please read the instructions carefully before filling the form.</p>
+    <p>All applicants are required to complete this form as part of the eligibility review process.</p>
+    <ol>
+      <li>Enter your full name as per official documents — no titles or initials.</li>
+      <li>This information is used to generate your official certificate — ensure accuracy.</li>
+      <li>By submitting, you confirm the information is true and complete to the best of your knowledge.</li>
+    </ol>
+
     <form id="registrationForm">
       <label for="fullName">Name of Candidate *</label>
       <input type="text" id="fullName" name="fullName" required>
@@ -123,6 +140,7 @@
         <input type="checkbox" id="declaration" name="declaration" required>
         I hereby declare that the information provided is true and correct to the best of my knowledge.
       </label>
+
       <button type="submit" class="submit-btn">Submit</button>
     </form>
   </div>
@@ -131,14 +149,14 @@
     document.getElementById('registrationForm').addEventListener('submit', function(e) {
       e.preventDefault();
       let valid = true;
-      const yearPattern = /(19|20)\d{2}/;
-      const forbidden = /\b(na|null|n\/a)\b/i;
+      const yearPattern = /(19|20)\\d{2}/;
+      const forbidden = /\\b(na|null|n\\/a)\\b/i;
 
       const fields = {
         fullName: { el: 'fullName', err: 'fullNameError', test: (val) =>
-          /^[A-Za-z]+(?: [A-Za-z]+)+$/.test(val) && !/\b(Dr|Er|Prof|Mr|Ms|Mrs)\b/i.test(val) && !/\b[A-Z]\.|\b[A-Z]{2,}\b/.test(val) },
-        email: { el: 'email', err: 'emailError', test: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) },
-        mobile: { el: 'mobile', err: 'mobileError', test: (val) => /^\+\d{10,15}$/.test(val) },
+          /^[A-Za-z]+(?: [A-Za-z]+)+$/.test(val) && !/\\b(Dr|Er|Prof|Mr|Ms|Mrs)\\b/i.test(val) && !/\\b[A-Z]\\.|\\b[A-Z]{2,}\\b/.test(val) },
+        email: { el: 'email', err: 'emailError', test: (val) => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(val) },
+        mobile: { el: 'mobile', err: 'mobileError', test: (val) => /^\\+\\d{10,15}$/.test(val) },
         degree: { el: 'degree', err: 'degreeError', test: (val) => yearPattern.test(val) && !forbidden.test(val) },
         currentOrg: { el: 'currentOrg', err: 'currentOrgError', test: (val) => yearPattern.test(val) && !forbidden.test(val) },
         workExperience: { el: 'workExperience', err: 'workExperienceError', test: (val) => yearPattern.test(val) && !forbidden.test(val) },
@@ -151,9 +169,12 @@
         const error = document.getElementById(fields[key].err);
         if (!fields[key].test(input)) {
           error.textContent = "Please enter valid information as per instructions.";
+          error.style.display = "block";
+          if (valid) document.getElementById(fields[key].el).scrollIntoView({ behavior: 'smooth' });
           valid = false;
         } else {
           error.textContent = "";
+          error.style.display = "none";
         }
       }
 
@@ -184,4 +205,3 @@
   </script>
 </body>
 </html>
-<!-- FINAL VERSION ENDS HERE -->
