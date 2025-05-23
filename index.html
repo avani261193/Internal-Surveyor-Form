@@ -151,25 +151,49 @@
     e.preventDefault();
     let valid = true;
 
-    // Add validation here if you want (optional)
+    const yearPattern = /(19|20)\d{2}/;
+    const forbidden = /\b(na|null|n\/a)\b/i;
 
-    const formData = {
-      fullName: document.getElementById('fullName').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      mobile: document.getElementById('mobile').value.trim(),
-      degree: document.getElementById('degree').value.trim(),
-      currentOrg: document.getElementById('currentOrg').value.trim(),
-      workExperience: document.getElementById('workExperience').value.trim(),
-      accreditation: document.getElementById('accreditation').value.trim(),
-      certifications: document.getElementById('certifications').value.trim()
+    const fields = {
+      fullName: { el: 'fullName', err: 'fullNameError', test: val =>
+        /^[A-Za-z]+(?: [A-Za-z]+)+$/.test(val) && !/\b(Dr|Er|Prof|Mr|Ms|Mrs)\b/i.test(val) && !/\b[A-Z]\.|\b[A-Z]{2,}\b/.test(val) },
+      email: { el: 'email', err: 'emailError', test: val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) },
+      mobile: { el: 'mobile', err: 'mobileError', test: val => /^\+\d{10,15}$/.test(val) },
+      degree: { el: 'degree', err: 'degreeError', test: val => yearPattern.test(val) && !forbidden.test(val) },
+      currentOrg: { el: 'currentOrg', err: 'currentOrgError', test: val => yearPattern.test(val) && !forbidden.test(val) },
+      workExperience: { el: 'workExperience', err: 'workExperienceError', test: val => yearPattern.test(val) && !forbidden.test(val) },
+      accreditation: { el: 'accreditation', err: 'accreditationError', test: val => /none/i.test(val) || (yearPattern.test(val) && !forbidden.test(val)) },
+      certifications: { el: 'certifications', err: 'certificationsError', test: val => /none/i.test(val) || (yearPattern.test(val) && !forbidden.test(val)) }
     };
+
+    const formData = {};
+
+    for (const key in fields) {
+      const input = document.getElementById(fields[key].el);
+      const val = input.value.trim();
+      formData[key] = val;
+      const error = document.getElementById(fields[key].err);
+      if (!fields[key].test(val)) {
+        error.style.display = "block";
+        error.textContent = "Please enter valid information as per instructions.";
+        if (valid) input.scrollIntoView({ behavior: "smooth" });
+        valid = false;
+      } else {
+        error.style.display = "none";
+      }
+    }
+
+    if (!document.getElementById('declaration').checked) {
+      alert("Please confirm the declaration.");
+      valid = false;
+    }
+
+    if (!valid) return;
 
     fetch('https://script.google.com/macros/s/AKfycbxQzLCbMqqcsVBy68kSVbQVaPShLKPik9sK45mA_6MBnaKeZZ83HsLYQD98SBxenQQP6g/exec', {
       method: 'POST',
       body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(res => res.text())
     .then(data => {
@@ -184,8 +208,5 @@
     });
   });
 </script>
-</body>
-</html>
-
 </body>
 </html>
