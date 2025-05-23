@@ -146,16 +146,30 @@
       <button type="submit" class="submit-btn">Submit</button>
     </form>
   </div>
-  <script>
+ <script>
   document.getElementById('registrationForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let valid = true;
 
-    const formData = new FormData(this);
+    // Add validation here if you want (optional)
+
+    const formData = {
+      fullName: document.getElementById('fullName').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      mobile: document.getElementById('mobile').value.trim(),
+      degree: document.getElementById('degree').value.trim(),
+      currentOrg: document.getElementById('currentOrg').value.trim(),
+      workExperience: document.getElementById('workExperience').value.trim(),
+      accreditation: document.getElementById('accreditation').value.trim(),
+      certifications: document.getElementById('certifications').value.trim()
+    };
 
     fetch('https://script.google.com/macros/s/AKfycbxQzLCbMqqcsVBy68kSVbQVaPShLKPik9sK45mA_6MBnaKeZZ83HsLYQD98SBxenQQP6g/exec', {
       method: 'POST',
-      body: formData
+      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
     .then(res => res.text())
     .then(data => {
@@ -170,5 +184,8 @@
     });
   });
 </script>
+</body>
+</html>
+
 </body>
 </html>
