@@ -196,8 +196,10 @@
       headers: { 'Content-Type': 'application/json' }
     })
     .then(res => res.text())
-    .then(data => {
-      if (data.includes("Submitted")) {
+   .then(data => {
+  console.log("Server response:", data); // ADDED
+  alert("Server says: " + data);         // ADDED
+  if (data.includes("Submitted")) {
         document.querySelector('.container').innerHTML = `
           <h2 class="thank-you">Thank You!</h2>
           <p>Your form has been submitted successfully.</p>
