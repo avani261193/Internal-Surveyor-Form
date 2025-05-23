@@ -56,6 +56,7 @@
     const checkbox = document.getElementById("declaration");
     const error = document.getElementById("error-declaration");
     if (!checkbox.checked) {
+      error.textContent = "You must accept the declaration to proceed.";
       error.style.display = 'block';
       return false;
     }
@@ -63,13 +64,10 @@
     return true;
   }
 
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const requiredFields = ["fullName", "mobile", "email", "orgrole", "degrees", "workRoles", "accreditation", "certifications"];
+  function validateInputs() {
     let valid = true;
-
-    for (let field of requiredFields) {
+    const fields = ["fullName", "mobile", "email", "orgrole"];
+    for (let field of fields) {
       const el = document.getElementById(field);
       const error = document.getElementById("error-" + field);
       if (!el.value.trim()) {
@@ -88,7 +86,12 @@
     valid = validateFiles() && valid;
     valid = validateDeclaration() && valid;
 
-    if (!valid) return;
+    return valid;
+  }
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    if (!validateInputs()) return;
 
     const formData = new FormData(form);
     const files = document.getElementById("files").files;
@@ -130,6 +133,15 @@
     })
     .catch(err => alert("❌ Network error: " + err));
   });
+
+  // Progress bar update
+  const formElements = form.querySelectorAll("input, textarea");
+  formElements.forEach(el => el.addEventListener('input', () => {
+    const filled = Array.from(formElements).filter(el => el.value.trim() !== "").length;
+    const total = formElements.length;
+    const percent = Math.floor((filled / total) * 100);
+    progressBar.style.width = percent + "%";
+  }));
 </script>
     body {
       font-family: 'Segoe UI', sans-serif;
