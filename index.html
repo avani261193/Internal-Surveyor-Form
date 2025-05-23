@@ -146,5 +146,29 @@
       <button type="submit" class="submit-btn">Submit</button>
     </form>
   </div>
+  <script>
+  document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let valid = true;
+
+    const formData = new FormData(this);
+
+    fetch('https://script.google.com/macros/s/AKfycbxQzLCbMqqcsVBy68kSVbQVaPShLKPik9sK45mA_6MBnaKeZZ83HsLYQD98SBxenQQP6g/exec', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.text())
+    .then(data => {
+      document.querySelector('.container').innerHTML = `
+        <h2 class="thank-you">Thank You!</h2>
+        <p>Your form has been submitted successfully.</p>
+      `;
+    })
+    .catch(err => {
+      alert("Error submitting the form. Please try again.");
+      console.error(err);
+    });
+  });
+</script>
 </body>
 </html>
