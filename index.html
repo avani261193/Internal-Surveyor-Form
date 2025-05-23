@@ -6,12 +6,13 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #FFFACD; /* Lemon background */
+      font-weight: bold;
+      background-color: #ffe6e6; /* Subtle red */
       padding: 30px;
       margin: 0;
     }
     .container {
-      background-color: #ffe5b4; /* Peach container */
+      background-color: #fffbc1; /* Lemon */
       padding: 30px;
       border-radius: 12px;
       max-width: 850px;
@@ -22,16 +23,15 @@
       text-align: center;
       color: #1a237e;
     }
-    ol {
-      background: #f3e5f5; /* light violet for instructions */
-      padding: 15px;
-      border-radius: 8px;
+    .instructions span {
+      display: block;
+      margin: 10px 0;
+      color: #8e24aa;
     }
     label {
       display: block;
       margin-top: 20px;
-      font-weight: bold;
-      color: #1565c0; /* Blue for questions */
+      color: #1565c0;
     }
     input, textarea {
       width: 100%;
@@ -40,23 +40,24 @@
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 1em;
+      font-weight: bold;
     }
     .description {
-      color: #8e24aa; /* Violet for descriptions */
+      color: #8e24aa;
       font-size: 0.9em;
     }
     .example {
       font-size: 0.9em;
-      color: #2e7d32; /* Green for examples */
+      color: #2e7d32;
     }
     .error {
       display: none;
-      color: #d32f2f; /* Red for errors */
+      color: #d32f2f;
       font-size: 0.9em;
       margin-top: 4px;
     }
     .submit-btn {
-      background-color: #fbc02d; /* Yellow button */
+      background-color: #fbc02d;
       color: #000;
       padding: 12px;
       margin-top: 25px;
@@ -76,132 +77,58 @@
   <div class="container">
     <img src="https://raw.githubusercontent.com/avani261193/Internal-Surveyor-Form/b22df7c80eb4612971554f2240a25408d9aaa192/logo.png" alt="Logo" style="display:block;margin:auto;max-width:150px;">
     <h2>Internal Surveyor Program Registration Form</h2>
-    <ol>
-      <li><span class="description">Enter your full name exactly as per official documents. Do not use titles, middle names, initials, or abbreviations.</span></li>
-      <li><span class="description">This information will be used for your certificate. Please ensure it is correct.</span></li>
-      <li><span class="description">By submitting this form, you confirm that all details are accurate and complete.</span></li>
-    </ol>
-
+    <div class="instructions">
+      <span>✅ Enter your full name exactly as per official documents — no titles or initials.</span>
+      <span>📌 This information will be used for certificates — ensure accuracy.</span>
+      <span>💡 By submitting this form, you confirm all details are accurate and complete.</span>
+    </div>
     <form id="registrationForm">
-      <label for="fullName">Name of Candidate *</label>
+      <label for="fullName">🔹 Name of Candidate *</label>
       <input type="text" id="fullName" name="fullName" required>
       <div class="example">e.g., Anita Sharma (not Dr A.K. Sharma)</div>
       <div class="error" id="fullNameError"></div>
 
-      <label for="email">Email Address *</label>
+      <label for="email">🔹 Email Address *</label>
       <input type="email" id="email" name="email" required>
       <div class="error" id="emailError"></div>
 
-      <label for="mobile">Mobile Number (with country code) *</label>
+      <label for="mobile">🔹 Mobile Number (with country code) *</label>
       <input type="tel" id="mobile" name="mobile" required>
       <div class="example">e.g., +91XXXXXXXXXX or +971XXXXXXXXX</div>
       <div class="error" id="mobileError"></div>
 
-      <label for="degree">Degree(s)/Educational Qualifications *</label>
+      <label for="degree">🔹 Degree(s)/Educational Qualifications *</label>
       <input type="text" id="degree" name="degree" required>
-      <div class="description">List all qualifications with completion/expected year, separated by commas.</div>
+      <div class="description">📌 List all qualifications with completion/expected year, separated by commas.</div>
       <div class="example">MBA 2020, BSc Nursing 2018, Pursuing MHA 2025 (expected)</div>
       <div class="error" id="degreeError"></div>
 
-      <label for="currentOrg">Current/Most Recent Role & Organization *</label>
+      <label for="currentOrg">🔹 Current/Most Recent Role & Organization *</label>
       <input type="text" id="currentOrg" name="currentOrg" required>
-      <div class="description">Format: Designation – Organization</div>
+      <div class="description">📌 Format: Designation – Organization</div>
       <div class="example">e.g., Quality Manager – XYZ Hospital 2023</div>
       <div class="error" id="currentOrgError"></div>
-
-      <label for="workExperience">Previous Work Roles & Duration *</label>
+      <label for="workExperience">🔹 Previous Work Roles & Duration *</label>
       <textarea id="workExperience" name="workExperience" required></textarea>
-      <div class="description">List roles with start–end years, separated by commas.</div>
+      <div class="description">📌 List roles with start–end years, separated by commas.</div>
       <div class="example">e.g., Consultant 2018–2022, Manager 2015–2018</div>
       <div class="error" id="workExperienceError"></div>
 
-      <label for="accreditation">Accreditation Body Experience *</label>
+      <label for="accreditation">🔹 Accreditation Body Experience *</label>
       <textarea id="accreditation" name="accreditation" required></textarea>
-      <div class="description">Mention all relevant accreditation bodies with roles and years. If none, write "None".</div>
-      <div class="example">e.g., NABH Consultant 2019–2022, JCI Observer 2021</div>
+      <div class="description">📌 Mention if you're currently associated or were previously associated with any international or local accreditation body. Include your role and the year(s). If none, write "None".</div>
+      <div class="example">e.g., NABH Consultant 2019–2022, JCI Observer 2021, Currently with QAI since 2023</div>
       <div class="error" id="accreditationError"></div>
 
-      <label for="certifications">Certifications *</label>
+      <label for="certifications">🔹 Certifications *</label>
       <textarea id="certifications" name="certifications" required></textarea>
-      <div class="description">List all certifications with year or write "None".</div>
+      <div class="description">📌 List all certifications with year or write "None".</div>
       <div class="example">e.g., BLS 2021, Six Sigma 2023</div>
       <div class="error" id="certificationsError"></div>
 
-      <label for="cvUpload">Upload CV (PDF):</label>
+      <label for="cvUpload">🔹 Upload CV (PDF):</label>
       <input type="file" id="cvUpload" name="cvUpload" accept=".pdf" required>
+      <div class="description">📌 Name your file with your full name (e.g., AnitaSharma_CV.pdf). Avoid names like doc1.pdf.</div>
 
-      <label for="idUpload">Upload ID Proof (PDF):</label>
-      <input type="file" id="idUpload" name="idUpload" accept=".pdf" required>
-
-      <label for="photoUpload">Upload Passport Size Photo (JPG/PNG):</label>
-      <input type="file" id="photoUpload" name="photoUpload" accept=".jpg,.jpeg,.png" required>
-
-      <label>
-        <input type="checkbox" id="declaration" name="declaration" required>
-        I hereby declare that the information provided is true and correct to the best of my knowledge.
-      </label>
-
-      <button type="submit" class="submit-btn">Submit</button>
-    </form>
-  </div>
-
-  <script>
-    document.getElementById('registrationForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      let valid = true;
-      const yearPattern = /(19|20)\\d{2}/;
-      const forbidden = /\\b(na|null|n\\/a)\\b/i;
-
-      const fields = {
-        fullName: { el: 'fullName', err: 'fullNameError', test: (val) =>
-          /^[A-Za-z]+(?: [A-Za-z]+)+$/.test(val) && !/\\b(Dr|Er|Prof|Mr|Ms|Mrs)\\b/i.test(val) && !/\\b[A-Z]\\.|\\b[A-Z]{2,}\\b/.test(val) },
-        email: { el: 'email', err: 'emailError', test: (val) => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(val) },
-        mobile: { el: 'mobile', err: 'mobileError', test: (val) => /^\\+\\d{10,15}$/.test(val) },
-        degree: { el: 'degree', err: 'degreeError', test: (val) => yearPattern.test(val) && !forbidden.test(val) },
-        currentOrg: { el: 'currentOrg', err: 'currentOrgError', test: (val) => yearPattern.test(val) && !forbidden.test(val) },
-        workExperience: { el: 'workExperience', err: 'workExperienceError', test: (val) => yearPattern.test(val) && !forbidden.test(val) },
-        accreditation: { el: 'accreditation', err: 'accreditationError', test: (val) => /none/i.test(val) || (yearPattern.test(val) && !forbidden.test(val)) },
-        certifications: { el: 'certifications', err: 'certificationsError', test: (val) => /none/i.test(val) || (yearPattern.test(val) && !forbidden.test(val)) },
-      };
-
-      for (const key in fields) {
-        const input = document.getElementById(fields[key].el).value.trim();
-        const error = document.getElementById(fields[key].err);
-        if (!fields[key].test(input)) {
-          error.textContent = "Please enter valid information as per instructions.";
-          error.style.display = "block";
-          if (valid) document.getElementById(fields[key].el).scrollIntoView({ behavior: 'smooth' });
-          valid = false;
-        } else {
-          error.textContent = "";
-          error.style.display = "none";
-        }
-      }
-
-      if (!document.getElementById('declaration').checked) {
-        alert("Please confirm the declaration.");
-        valid = false;
-      }
-
-      if (!valid) return;
-
-      const formData = new FormData(this);
-      fetch('https://script.google.com/macros/s/AKfycbyGW7vbVaIbGy-PFtNCohv83wEk5hb1AnhIAHEiFz3dAHUQXinOu8BssoVjsU1oGqnMqg/exec', {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.text())
-      .then(data => {
-        document.querySelector('.container').innerHTML = `
-          <h2 class="thank-you">Thank You!</h2>
-          <p>Your form has been submitted successfully.</p>
-        `;
-      })
-      .catch(err => {
-        alert("Error submitting the form. Please try again.");
-        console.error(err);
-      });
-    });
-  </script>
-</body>
-</html>
+      <label for="idUpload">🔹 Upload ID Proof (PDF):</label>
+      <input type="file" id="idUpload
