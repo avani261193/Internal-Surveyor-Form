@@ -180,11 +180,11 @@
 
     if (!valid) return;
 
-    fetch('https://script.google.com/macros/s/AKfycbxiNpsGjYg-H-sOd1PdTTM7kAlIckoTPAKIZSTG2q14QGOUo2h_SUpvSx9SPEhVlXCl2g/exec', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-      headers: { 'Content-Type': 'application/json' }
-    })
+    fetch('https://script.google.com/macros/s/AKfycby-9fj84wW9bLnugA5WWbn-cAAyrOj3RD8uCdLQ0pri3pPU7ZS5XZVvbJlEve0E87iaXA/exec', {
+  method: 'POST',
+  body: JSON.stringify(formData),
+  headers: { 'Content-Type': 'application/json' }
+})
     .then(res => res.text())
     .then(data => {
       if (data.includes("Submitted")) {
