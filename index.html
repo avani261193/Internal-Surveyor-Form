@@ -138,12 +138,16 @@
 <script>
   document.getElementById('registrationForm').addEventListener('submit', function(e) {
     e.preventDefault();
+
     let valid = true;
     const yearPattern = /(19|20)\d{2}/;
     const forbidden = /\b(na|null|n\/a)\b/i;
+
     const fields = {
       fullName: { el: 'fullName', err: 'fullNameError', test: val =>
-        /^[A-Za-z]+(?: [A-Za-z]+)+$/.test(val) && !/\b(Dr|Er|Prof|Mr|Ms|Mrs)\b/i.test(val) && !/\b[A-Z]\.|\b[A-Z]{2,}\b/.test(val) },
+        /^[A-Za-z]+(?: [A-Za-z]+)+$/.test(val) &&
+        !/\b(Dr|Er|Prof|Mr|Ms|Mrs)\b/i.test(val) &&
+        !/\b[A-Z]\.|\b[A-Z]{2,}\b/.test(val) },
       email: { el: 'email', err: 'emailError', test: val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) },
       mobile: { el: 'mobile', err: 'mobileError', test: val => /^\+\d{10,15}$/.test(val) },
       degree: { el: 'degree', err: 'degreeError', test: val => yearPattern.test(val) && !forbidden.test(val) },
@@ -152,6 +156,7 @@
       accreditation: { el: 'accreditation', err: 'accreditationError', test: val => /none/i.test(val) || (yearPattern.test(val) && !forbidden.test(val)) },
       certifications: { el: 'certifications', err: 'certificationsError', test: val => /none/i.test(val) || (yearPattern.test(val) && !forbidden.test(val)) }
     };
+
     const formData = {};
     for (const key in fields) {
       const input = document.getElementById(fields[key].el);
@@ -167,34 +172,33 @@
         error.style.display = "none";
       }
     }
+
     if (!document.getElementById('declaration').checked) {
       alert("Please confirm the declaration.");
       valid = false;
     }
+
     if (!valid) return;
-fetch('https://script.google.com/macros/s/AKfycbxiNpsGjYg-H-sOd1PdTTM7kAlIckoTPAKIZSTG2q14QGOUo2h_SUpvSx9SPEhVlXCl2g/exec', {
-  method: 'POST',
-  body: JSON.stringify(formData),
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
+
+    fetch('https://script.google.com/macros/s/AKfycbxiNpsGjYg-H-sOd1PdTTM7kAlIckoTPAKIZSTG2q14QGOUo2h_SUpvSx9SPEhVlXCl2g/exec', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+      headers: { 'Content-Type': 'application/json' }
+    })
     .then(res => res.text())
-   .then(data => {
-  console.log("Server response:", data); // ADDED
-  alert("Server says: " + data);         // ADDED
-  if (data.includes("Submitted")) {
+    .then(data => {
+      if (data.includes("Submitted")) {
         document.querySelector('.container').innerHTML = `
           <h2 class="thank-you">Thank You!</h2>
           <p>Your form has been submitted successfully.</p>
         `;
       } else {
-        throw new Error("Unexpected response: " + data);
+        alert("Unexpected response: " + data);
       }
     })
-    .catch(err => {
+    .catch(error => {
       alert("Error submitting the form. Please try again.");
-      console.error(err);
+      console.error("Fetch error:", error);
     });
   });
 </script>
