@@ -87,22 +87,18 @@
       <input type="text" id="fullName" name="fullName" required>
       <div class="example">e.g., Anita Sharma (not Dr A.K. Sharma)</div>
       <div class="error" id="fullNameError"></div>
-
       <label for="email">🔹 Email Address *</label>
       <input type="email" id="email" name="email" required>
       <div class="error" id="emailError"></div>
-
       <label for="mobile">🔹 Mobile Number (with country code) *</label>
       <input type="tel" id="mobile" name="mobile" required>
       <div class="example">e.g., +91XXXXXXXXXX or +971XXXXXXXXX</div>
       <div class="error" id="mobileError"></div>
-
       <label for="degree">🔹 Degree(s)/Educational Qualifications *</label>
       <input type="text" id="degree" name="degree" required>
       <div class="description">📌 List all qualifications with completion/expected year, separated by commas.</div>
       <div class="example">MBA 2020, BSc Nursing 2018, Pursuing MHA 2025 (expected)</div>
       <div class="error" id="degreeError"></div>
-
       <label for="currentOrg">🔹 Current/Most Recent Role & Organization *</label>
       <input type="text" id="currentOrg" name="currentOrg" required>
       <div class="description">📌 Format: Designation – Organization</div>
@@ -113,36 +109,29 @@
       <div class="description">📌 List roles with start–end years, separated by commas.</div>
       <div class="example">e.g., Consultant 2018–2022, Manager 2015–2018</div>
       <div class="error" id="workExperienceError"></div>
-
       <label for="accreditation">🔹 Accreditation Body Experience *</label>
       <textarea id="accreditation" name="accreditation" required></textarea>
       <div class="description">📌 Mention if you're currently associated or were previously associated with any international or local accreditation body. Include your role and the year(s). If none, write "None".</div>
       <div class="example">e.g., NABH Consultant 2019–2022, JCI Observer 2021, Currently with QAI since 2023</div>
       <div class="error" id="accreditationError"></div>
-
       <label for="certifications">🔹 Certifications *</label>
       <textarea id="certifications" name="certifications" required></textarea>
       <div class="description">📌 List all certifications with year or write "None".</div>
       <div class="example">e.g., BLS 2021, Six Sigma 2023</div>
       <div class="error" id="certificationsError"></div>
-
       <label for="cvUpload">🔹 Upload CV (PDF):</label>
       <input type="file" id="cvUpload" name="cvUpload" accept=".pdf" required>
       <div class="description">📌 Name your file with your full name (e.g., AnitaSharma_CV.pdf). Avoid names like doc1.pdf.</div>
-
       <label for="idUpload">🔹 Upload ID Proof (PDF):</label>
       <input type="file" id="idUpload" name="idUpload" accept=".pdf" required>
       <div class="description">📌 Name your file with your full name (e.g., AnitaSharma_ID.pdf). Avoid names like fgdsf.pdf.</div>
-
       <label for="photoUpload">🔹 Upload Passport Size Photo (JPG/PNG):</label>
       <input type="file" id="photoUpload" name="photoUpload" accept=".jpg,.jpeg,.png" required>
       <div class="description">📌 Name your file with your full name (e.g., AnitaSharma_Photo.jpg). Avoid names like img46535.jpg.</div>
-
       <label>
         <input type="checkbox" id="declaration" name="declaration" required>
         🔒 I hereby declare that the information provided is true and correct to the best of my knowledge.
       </label>
-
       <button type="submit" class="submit-btn">Submit</button>
     </form>
   </div>
@@ -150,10 +139,8 @@
   document.getElementById('registrationForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let valid = true;
-
     const yearPattern = /(19|20)\d{2}/;
     const forbidden = /\b(na|null|n\/a)\b/i;
-
     const fields = {
       fullName: { el: 'fullName', err: 'fullNameError', test: val =>
         /^[A-Za-z]+(?: [A-Za-z]+)+$/.test(val) && !/\b(Dr|Er|Prof|Mr|Ms|Mrs)\b/i.test(val) && !/\b[A-Z]\.|\b[A-Z]{2,}\b/.test(val) },
@@ -165,9 +152,7 @@
       accreditation: { el: 'accreditation', err: 'accreditationError', test: val => /none/i.test(val) || (yearPattern.test(val) && !forbidden.test(val)) },
       certifications: { el: 'certifications', err: 'certificationsError', test: val => /none/i.test(val) || (yearPattern.test(val) && !forbidden.test(val)) }
     };
-
     const formData = {};
-
     for (const key in fields) {
       const input = document.getElementById(fields[key].el);
       const val = input.value.trim();
@@ -182,19 +167,18 @@
         error.style.display = "none";
       }
     }
-
     if (!document.getElementById('declaration').checked) {
       alert("Please confirm the declaration.");
       valid = false;
     }
-
     if (!valid) return;
-
-    fetch('https://script.google.com/macros/s/AKfycbyr-4mwIWo8sRbWTVeMFlMXW47R81e7TvbFreMaKZ7iOJuJ2sXYlTpm-2BwosnvPCzATQ/exec', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-      headers: { 'Content-Type': 'application/json' }
-    })
+fetch('https://script.google.com/macros/s/AKfycbxiNpsGjYg-H-sOd1PdTTM7kAlIckoTPAKIZSTG2q14QGOUo2h_SUpvSx9SPEhVlXCl2g/exec', {
+  method: 'POST',
+  body: JSON.stringify(formData),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
     .then(res => res.text())
    .then(data => {
   console.log("Server response:", data); // ADDED
